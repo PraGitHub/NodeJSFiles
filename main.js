@@ -13,13 +13,19 @@ var storage	=	multer.diskStorage({
       callback(null, './uploads/'+strTime);
     },
     filename: function (httpReq, FileObject, callback) {
-      callback(null, FileObject.originalname);
+      if(FileObject.fieldname == 'FilePathA'){
+          callback(null,'A_'+FileObject.originalname);
+      }
+      else if(FileObject.fieldname == 'FilePathB'){
+        callback(null,'B_'+FileObject.originalname);
+      }
+      else{
+        callback(null, FileObject.originalname);
+      }
     }
   });
 
-var upload = multer({ storage : storage}).array('FilePath');
-var uploadA = multer({storage:storage}).single('FilePathA');
-var uploadB = multer({storage:storage}).single('FilePathB');
+var uploader = multer({storage:storage});
 
 var app = express();
 
@@ -40,6 +46,10 @@ for(let i=0;i<process.argv.length;i++){
 app.listen(httpPort,function(err,res){
     if(err) throw err;
     console.log('Server @ '+httpPort);
+    if(fs.existsSync(__dirname+'/uploads')==false){
+        fs.mkdirSync(__dirname+'/uploads');
+    }
+    
 });
 
 app.get('/',function(httpReq,httpRes){
@@ -47,10 +57,11 @@ app.get('/',function(httpReq,httpRes){
 });
 
 app.post('/Upload',function(httpReq,httpRes){
-    //console.log(httpReq.body);
     strTime = Date.now();
 
     fs.mkdirSync(__dirname+'/uploads/'+strTime);
+
+    var upload = uploader.array('FilePath');
     
     upload(httpReq,httpRes,function(err){
         if(err){
@@ -66,5 +77,20 @@ app.get('/CompareForm',function(httpReq,httpRes){
 });
 
 app.post('/Compare',function(httpReq,httpRes){
-    
+    strTime = Date.now();
+
+    fs.mkdirSync(__dirname+'/uploads/'+strTime);
+
+    var uploadCompare = uploader.fields([
+        {name:'FilePathA'},
+        {name:'FilePathB'}
+    ]);
+
+    uploadCompare(httpReq,httpRes,function(err){
+        if(err){
+            console.log(err);
+            httpRes.sendFile(__dirname+'/uploadFailed.html');
+        }
+        httpRes.sendFile(__dirname+'/uploadSuccess.html');
+    });
 });
