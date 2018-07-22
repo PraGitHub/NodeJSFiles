@@ -10,18 +10,18 @@ var strTime = Date.now();
 
 var storage	=	multer.diskStorage({
     destination: function (httpReq, FileObject, callback) {
-      callback(null, './uploads/'+strTime);
+    if(FileObject.fieldname == 'FilePathA'){
+      callback(null, './uploads/'+strTime+'/A');        
+    }
+    else if(FileObject.fieldname == 'FilePathB'){
+        callback(null, './uploads/'+strTime+'/B');   
+    }
+    else{
+        callback(null, './uploads/'+strTime);   
+    }
     },
     filename: function (httpReq, FileObject, callback) {
-      if(FileObject.fieldname == 'FilePathA'){
-          callback(null,'A_'+FileObject.originalname);
-      }
-      else if(FileObject.fieldname == 'FilePathB'){
-        callback(null,'B_'+FileObject.originalname);
-      }
-      else{
         callback(null, FileObject.originalname);
-      }
     }
   });
 
@@ -80,6 +80,8 @@ app.post('/Compare',function(httpReq,httpRes){
     strTime = Date.now();
 
     fs.mkdirSync(__dirname+'/uploads/'+strTime);
+    fs.mkdirSync(__dirname+'/uploads/'+strTime+'/A');
+    fs.mkdirSync(__dirname+'/uploads/'+strTime+'/B');
 
     var uploadCompare = uploader.fields([
         {name:'FilePathA'},
