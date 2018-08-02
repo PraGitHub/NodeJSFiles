@@ -101,6 +101,9 @@ app.post('/Compare',function(httpReq,httpRes){
         //it is obvious that there will always be only one file in A and B folders
         //get the file full path somehow
         //compare the files somehow - may you should have to look for a node module
+        var strFilePathA = strDir+'/A/'+fs.readdirSync(strDir+'/A')[0];
+        var strFilePathB = strDir+'/B/'+fs.readdirSync(strDir+'/B')[0];
+        console.log(strFilePathA,strFilePathB);
         httpRes.sendFile(__dirname+'/uploadSuccess.html');
     });
 });

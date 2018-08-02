@@ -15,10 +15,10 @@ Finding diff - https://stackoverflow.com/questions/3338126/how-do-i-diff-the-sam
 
 How to use ?
 
-download the zip file, extract it
-run 'npm install'
-run 'node main.js -port=PortNumber'
-    default PortNumber is 8085
-make sure you have nodejs installed before all
+    download the zip file, extract it
+    run 'npm install'
+    run 'node main.js -port=PortNumber'
+        default PortNumber is 8085
+    make sure you have nodejs installed before all
 
 -------------------------------------------------------------------------------------------------
