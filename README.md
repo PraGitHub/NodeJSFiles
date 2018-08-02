@@ -12,3 +12,13 @@ How does git store files - https://www.google.co.in/url?sa=t&source=web&rct=j&ur
 
 Finding diff - https://stackoverflow.com/questions/3338126/how-do-i-diff-the-same-file-between-two-different-commits-on-the-same-branch
 -------------------------------------------------------------------------------------------------
+
+How to use ?
+
+download the zip file, extract it
+run 'npm install'
+run 'node main.js -port=PortNumber'
+    default PortNumber is 8085
+make sure you have nodejs installed before all
+
+-------------------------------------------------------------------------------------------------
