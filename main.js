@@ -79,20 +79,28 @@ app.get('/CompareForm',function(httpReq,httpRes){
 app.post('/Compare',function(httpReq,httpRes){
     strTime = Date.now();
 
-    fs.mkdirSync(__dirname+'/uploads/'+strTime);
-    fs.mkdirSync(__dirname+'/uploads/'+strTime+'/A');
-    fs.mkdirSync(__dirname+'/uploads/'+strTime+'/B');
+    var strDir = __dirname+'/uploads/'+strTime;
+
+    fs.mkdirSync(strDir);
+    fs.mkdirSync(strDir+'/A');
+    fs.mkdirSync(strDir+'/B');
 
     var uploadCompare = uploader.fields([
         {name:'FilePathA'},
         {name:'FilePathB'}
     ]);
 
+    //console.log(uploadCompare);
+
     uploadCompare(httpReq,httpRes,function(err){
         if(err){
             console.log(err);
             httpRes.sendFile(__dirname+'/uploadFailed.html');
         }
+        //Read the directories - strDir/A and strDir/B for the file present in them
+        //it is obvious that there will always be only one file in A and B folders
+        //get the file full path somehow
+        //compare the files somehow - may you should have to look for a node module
         httpRes.sendFile(__dirname+'/uploadSuccess.html');
     });
 });
