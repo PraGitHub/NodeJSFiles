@@ -103,7 +103,30 @@ app.post('/Compare',function(httpReq,httpRes){
         //compare the files somehow - may you should have to look for a node module
         var strFilePathA = strDir+'/A/'+fs.readdirSync(strDir+'/A')[0];
         var strFilePathB = strDir+'/B/'+fs.readdirSync(strDir+'/B')[0];
-        console.log(strFilePathA,strFilePathB);
-        httpRes.sendFile(__dirname+'/uploadSuccess.html');
+        //console.log(strFilePathA,strFilePathB);
+        var strFileA = fs.readFileSync(strFilePathA).toString();
+        var strFileB = fs.readFileSync(strFilePathB).toString();
+
+        if(httpReq.body.Mode == '0'){
+            var diff = require('diff');
+            var diffList = diff.diffChars(strFileA,strFileB);
+            for(let i in diffList){
+                var diffElement = diffList[i];
+                console.log(diffElement.value);
+                httpRes.write(diffElement.value);
+            }
+            httpRes.end();
+        }
+        else{
+            var Diff = require('text-diff');
+            var diff = new Diff();
+            var diffList = diff.main(strFileA,strFileB);
+            //diff.cleanupSemantic(diffList);
+            diff.cleanupEfficiency(diffList);
+            var diffHTML = diff.prettyHtml(diffList);
+            //console.log(diffHTML);
+            httpRes.send(diffHTML);
+            httpRes.end();
+        }
     });
 });
